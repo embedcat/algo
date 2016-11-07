@@ -1,0 +1,96 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <time.h>
+#include <cstdlib>
+using namespace std;
+
+//#define TEST
+#define MAX_RANGE	16
+#define MAX_NUM		20
+#define MAX_DOTS	10
+
+typedef pair<int, int> Segment;
+
+bool segmentComparator(Segment s1, Segment s2) {
+	if (s1.first < s2.first)
+		return true;
+	else if (s1.first == s2.first)
+		return s1.second < s2.second;
+	return false;
+}
+
+int main() {
+	int n = 0, m = 0;
+#ifndef TEST
+	cin >> n >> m;
+#else
+	srand(time(NULL));
+	n = MAX_NUM;
+	m = MAX_DOTS;
+#endif
+
+	vector<Segment> seg;
+
+	for (int i = 0; i < n; i++) {
+		int a, b;
+#ifndef TEST
+
+		cin >> a >> b;
+#else
+		a = rand() % MAX_RANGE - MAX_RANGE / 2;
+		do {
+			b = rand() % MAX_RANGE - MAX_RANGE / 2;
+		} while (b < a);
+#endif
+		seg.emplace_back(a, b);
+	}
+
+	sort(seg.begin(), seg.end(), segmentComparator);
+
+#ifndef TEST
+	for (int i = 0; i < m; i++) {
+		int x, cnt = 0;
+		cin >> x;
+		if (x < seg[0].first || x > seg[seg.size() - 1].second) {
+			cout << "0 ";
+			continue;
+		}
+		for (auto it : seg)  {
+			if ((x >= it.first) && (x <= it.second)) {
+				cnt++;
+			}
+			if ((cnt != 0) && (x < it.first)) {
+				break;
+			}
+		}
+		cout << cnt << " ";
+	}
+#else
+#if 1
+	for (auto it : seg) {
+		cout << it.first << ":" << it.second << endl;
+	}
+#endif
+	for (int i = 0; i < m; i++) {
+		int x = rand() % MAX_RANGE - MAX_RANGE / 2;
+		//int x = i;
+		int cnt = 0;
+		cout << "x: " << x << ". in segments: ";
+		for (auto it : seg) {
+//			cout << it.first << ":" << it.second << ";";
+			if (x >= it.first ) {
+				if (x <= it.second) {
+					cnt++;
+				} else {
+					//break;
+				}
+			}
+		}
+		cout << cnt << endl;
+	}
+
+#endif
+
+	return 0;
+}

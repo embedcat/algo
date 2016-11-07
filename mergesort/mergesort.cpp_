@@ -1,0 +1,117 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <time.h>
+using namespace std;
+
+int cnt = 0;
+
+vector<int> merge(vector<int> left, vector<int> right) {
+	vector<int> sorted;
+	int lcnt = 0, rcnt = 0;
+
+	cout << "l: ";
+	for (auto i : left) {
+		cout << i << " ";
+	}
+	cout << endl << "r: ";
+	for (auto i : right) {
+		cout << i << " ";
+	}
+	cout << endl;
+
+	int l = 0;
+	int r = 0;
+	while (lcnt < left.size() || rcnt < right.size()) {
+		if (lcnt == left.size()) {
+			sorted.emplace_back(right[rcnt++]);
+		} else if (rcnt == right.size()) {
+			sorted.emplace_back(left[lcnt++]);
+		} else if (left[lcnt] <= right[rcnt]) {
+			sorted.emplace_back(left[lcnt++]);
+		} else {
+			sorted.emplace_back(right[rcnt++]);
+			cnt += left.size() - lcnt;
+		}
+	}
+
+
+/*
+	for (int i = 0; i < left.size() + right.size(); i++) {
+		int l = left[lcnt];
+		int r = right[rcnt];
+
+		cout << "Compare: " << l << " and " << r << " -> ";
+		if (l <= r) {
+			cout << l << endl;
+			sorted.emplace_back(l);
+			if (lcnt == left.size() - 1) {
+				do {
+					sorted.emplace_back(right[rcnt]);
+					rcnt++;
+				} while (rcnt < right.size());
+				break;
+			} else {
+				lcnt++;
+			}
+		} else {
+			cout << r << endl;
+			sorted.emplace_back(r);
+			if (rcnt == right.size() - 1) {
+
+				while (lcnt < left.size()) {
+					cnt += left.size() - lcnt;
+					sorted.emplace_back(left[lcnt]);
+					lcnt++;
+				};
+				break;
+			} else {
+				rcnt++;
+				cnt++;
+			}
+		}
+
+	}
+*/
+	cout << "cnt = " << cnt << endl;
+	cout << "merge() return vector: ";
+	for (auto i : sorted) {
+		cout << i << " ";
+	}
+	cout << endl;
+
+	return sorted;
+}
+
+vector<int> mergeSort(vector<int> v) {
+	if (v.size() > 1) {
+		int m = v.size() / 2;
+		vector<int> v1(v.begin(), v.begin() + m);
+		vector<int> v2(v.begin() + m, v.end());
+		return merge(mergeSort(v1), mergeSort(v2));
+	}
+	return v;
+}
+
+int main() {
+	vector<int> a, sorted;
+	srand(time(NULL));
+	int size = 23;
+	cin >> size;
+
+	for (int i = 0; i < size; ++i) {
+		int n = 0;
+//		n = rand() % 100;
+		cin >> n;
+		a.push_back(n);
+	}
+
+	sorted = mergeSort(a);
+	cout << "Sorted: ";
+	for (auto it : sorted) {
+		cout << it << " ";
+	}
+	cout << endl << cnt << endl;
+
+	return 0;
+}
