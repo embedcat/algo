@@ -12,10 +12,9 @@ long getNumLessThanOrEquals(const vector<long> v, long x) {
 		m = (l + r) / 2;
 		if (r <= l) {
 			if (x >= v[m]) {
-				return m + 1;
-			} else {
-				return m;
+				return (m + 1);
 			}
+			return m;
 		}
 		if (x >= v[m]) {
 			l = m + 1;
@@ -23,6 +22,31 @@ long getNumLessThanOrEquals(const vector<long> v, long x) {
 			r = m - 1;
 		}
 
+	}
+	return 0;
+}
+
+long getNumLessThan(const vector<long> v, long x) {
+	long l = 0, r = v.size();
+	long m = 0;
+	if (v[r - 1] < x) return r;
+
+	while (l <= r) {
+		m = (l + r) / 2;
+
+		if (v[m] == x) {
+			if (v[m-1] != x) {
+				return m;
+			}
+
+
+		}
+
+		if (v[m] > x) {
+			r = m - 1;
+		} else {
+			l = m + 1;
+		}
 	}
 	return 0;
 }
@@ -43,6 +67,15 @@ int main() {
 	sort(left.begin(), left.end());
 	sort(right.begin(), right.end());
 
+	for (auto it : left) {
+		cout << it << " ";
+	}
+	cout << endl;
+	for (auto it : right) {
+		cout << it << " ";
+	}
+	cout << endl;
+
 	vector<long> dots;
 	for (int i = 0; i < m; i++) {
 		long x;
@@ -54,8 +87,10 @@ int main() {
 	for (auto it : dots) {
 		long starts, ends;
 		starts = getNumLessThanOrEquals(left, it);
-		ends = getNumLessThanOrEquals(right, it);
+		ends = getNumLessThan(right, it);
 		cnt.emplace_back(starts - ends);
+		cout << "dot: " << it << ". " << starts << " - " << ends << " = "
+				<< starts - ends << endl;
 	}
 
 	for (auto it : cnt) {
