@@ -30,7 +30,7 @@ bool segmentComparator(Segment s1, Segment s2) {
 }
 
 template<typename T>
-T getNumLessThanOrEquals(vector<T> v, T x) {
+T getNumLessThanOrEquals(const vector<T> v, T x) {
 	T l = 0, r = v.size() - 1;
 	T m = 0;
 
@@ -123,25 +123,25 @@ int main() {
 	}
 
 	clock_t time_after_input = clock() - time_start;
-
+	clock_t time_s = clock();
 	sort(left.begin(), left.end());
 	sort(right.begin(), right.end());
 	sort(allDots.begin(), allDots.end(), dotComparator);
 	sort(seg.begin(), seg.end(), segmentComparator);
 
-	clock_t time_after_sort = clock() - time_after_input;
-
+	clock_t time_after_sort = clock() - time_s;
+	time_s = clock();
 	vector<int> cnt;
 	for (auto it : dots) {
 		int starts, ends;
 		starts = getNumLessThanOrEquals(left, it);
 		ends = getNumLessThanOrEquals(right, it);
 		cnt.emplace_back(starts - ends);
-		//	cout << starts - ends << " ";
 	}
 
-	clock_t time_after_algo1 = clock() - time_after_sort;
-
+	clock_t time_after_algo1 = clock() - time_s;
+	time_s = clock();
+/*
 	vector<long> cnt2;
 	for (auto it : dots) {
 		long count;
@@ -149,9 +149,10 @@ int main() {
 
 		cnt2.emplace_back(count);
 	}
-
-	clock_t time_after_algo2 = clock() - time_after_algo1;
-
+*/
+	clock_t time_after_algo2 = clock() - time_s;
+	time_s = clock();
+/*
 	vector<long> cnt3;
 	for (auto it : dots) {
 		long count;
@@ -159,9 +160,10 @@ int main() {
 
 		cnt3.emplace_back(count);
 	}
-
-	clock_t time_after_algo3 = clock() - time_after_algo2;
-
+*/
+	clock_t time_after_algo3 = clock() - time_s;
+	time_s = clock();
+/*
 	for (auto i = 0; i < cnt.size(); i++) {
 		if (cnt[i] != cnt2[i] ||
 				cnt[i] != cnt3[i] ||
@@ -169,16 +171,18 @@ int main() {
 			cout << "Err: " << cnt[i] << " or " << cnt2[i] << " or " << cnt3[i] << endl;
 		}
 	}
+*/
 
-	/*
 	 for (auto it : cnt) {
-	 cout << it << " ";
+		 cout << it << " ";
+	//	 printf("%d ", it);
 	 }
-	 */
-	clock_t time_after_output = clock() - time_after_algo3;
+
+	clock_t time_after_output = clock() - time_s;
 	clock_t time_all = clock() - time_start;
 
 	cout << endl;
+	printf("Num: %d\n", n);
 	printf("Input: %f\n", (float) time_after_input / CLOCKS_PER_SEC);
 	printf("Sort: %f\n", (float) time_after_sort / CLOCKS_PER_SEC);
 	printf("Algo1: %f\n", (float) time_after_algo1 / CLOCKS_PER_SEC);

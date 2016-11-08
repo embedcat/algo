@@ -1,69 +1,66 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <ios>
 using namespace std;
 
-int getDotsLessThanNumber(const std::vector<int> &numbers, int number) {
-	int l = 0;
-	int r = numbers.size();
-	while (l <= r) {
-		int m = (l + r) / 2;
-		/*
-		if (numbers[m] == number) {
-			return m + 1;
-		} else
-		*/
-		if (numbers[m] > number) {
-			r = m - 1;
-		} else {
+long getNumLessThanOrEquals(const vector<long> v, long x) {
+	long l = 0, r = v.size() - 1;
+	long m = 0;
+
+	while (1) {
+		m = (l + r) / 2;
+		if (r <= l) {
+			if (x >= v[m]) {
+				return m + 1;
+			} else {
+				return m;
+			}
+		}
+		if (x >= v[m]) {
 			l = m + 1;
+		} else {
+			r = m - 1;
 		}
-		if (l == r) {
-			return l + 1;
-		}
+
 	}
 	return 0;
 }
 
-
 int main() {
+	ios_base::sync_with_stdio(false);
 	int n = 0, m = 0;
 	cin >> n >> m;
 
-	vector<int> leftD, rightD;
+	vector<long> left, right;
 	for (int i = 0; i < n; i++) {
-		int a, b;
+		long a, b;
 		cin >> a >> b;
-		leftD.emplace_back(a);
-		rightD.emplace_back(b);
+		left.emplace_back(a);
+		right.emplace_back(b);
 	}
 
-	sort(leftD.begin(), leftD.end());
-	sort(rightD.begin(), rightD.end());
+	sort(left.begin(), left.end());
+	sort(right.begin(), right.end());
 
-	for (auto it : leftD) {
+	vector<long> dots;
+	for (int i = 0; i < m; i++) {
+		long x;
+		cin >> x;
+		dots.emplace_back(x);
+	}
+
+	vector<long> cnt;
+	for (auto it : dots) {
+		long starts, ends;
+		starts = getNumLessThanOrEquals(left, it);
+		ends = getNumLessThanOrEquals(right, it);
+		cnt.emplace_back(starts - ends);
+	}
+
+	for (auto it : cnt) {
 		cout << it << " ";
 	}
-	cout << endl;
 
-	for (int i = 0; i < m; i++) {
-		int start = getDotsLessThanNumber(leftD, i);
-		cout << "i = " << i << ". Less than: " << start << endl;
-
-	}
-
-/*
-	for (int i = 0; i < m; i++) {
-		int x, cnt = 0;
-		cin >> x;
-
-		int segStarts = get_pos(leftD, x);
-		int segEnds = get_pos(rightD, x);
-		cout << "X: " << x << ". Segm starts: " << segStarts << ". Segm ends: " << segEnds << ". Cnt: ";
-		if (segStarts >= 0) cnt = segStarts - segEnds;
-
-		cout << cnt << endl;
-	}
-	*/
 	return 0;
 }
